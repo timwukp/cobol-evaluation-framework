@@ -1,0 +1,32 @@
+{
+  "mcq_tests": [
+    {
+      "id": 1,
+      "question": "Which of the following is a significant advantage of COBOL for Government systems?",
+      "options": {
+        "A": "Supports multiple programming paradigms",
+        "B": "Native support for object-oriented programming",
+        "C": "Easy integration with legacy systems",
+        "D": "Wide range of third-party tools and libraries"
+      },
+      "correct_answer": "C",
+      "prompt": "Question: Which of the following is a significant advantage of COBOL for Government systems?\n\nA) Supports multiple programming paradigms\nB) Native support for object-oriented programming\nC) Easy integration with legacy systems\nD) Wide range of third-party tools and libraries\n\nPlease answer with just the letter (A, B, C, or D)."
+    }
+  ],
+  "qa_tests": [
+    {
+      "id": 1,
+      "question": "What is the future of COBOL in mainframe computing?",
+      "reference_answer": "As businesses increasingly migrate away from mainframes and update their legacy applications, the future of COBOL in mainframe computing is uncertain. However, it will likely continue to be used for mission-critical applications in industries such as finance, government, and healthcare for the foreseeable future.",
+      "prompt": "Question: What is the future of COBOL in mainframe computing?\n\nPlease provide a clear and concise answer."
+    }
+  ],
+  "code_tests": [
+    {
+      "id": 1,
+      "source_code": "TIME-RTN.\n      *    ***<<   時間処理    >>***\n           DISPLAY 'ENTER TIME: '.\n           ACCEPT  WK-INPUT-TIME.\n           UNSTRING WK-INPUT-TIME DELIMITED BY ':'\n           INTO WK-HH, WK-MM, WK-SS.",
+      "reference_summary": "The provided Cobol code is designed to accept a time input from the user, and then edit and format the input time. The code accepts the time input, unstrings it into hours, minutes, and seconds, and then formats each component to ensure they are displayed with leading zeros if necessary.",
+      "prompt": "Please summarize the following COBOL code:\n\nTIME-RTN.\n      *    ***<<   時間処理    >>***\n           DISPLAY 'ENTER TIME: '.\n           ACCEPT  WK-INPUT-TIME.\n           UNSTRING WK-INPUT-TIME DELIMITED BY ':'\n           INTO WK-HH, WK-MM, WK-SS.\n\nProvide a clear, brief summary of what this code does."
+    }
+  ]
+}
