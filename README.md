@@ -32,16 +32,25 @@ source cobol_eval_env/bin/activate
 pip install -r requirements.txt
 ```
 
+### Get Complete Dataset
+The full test datasets (7,052 tests) can be downloaded from:
+**https://huggingface.co/datasets/Fsoft-AIC/MainframeBench**
+
+Or generate locally:
+```bash
+python src/full_eval.py  # Downloads and processes complete dataset
+```
+
 ### Run Evaluation
 ```bash
 # Secure evaluation (recommended)
 python src/secure_evaluator.py
 
-# Complete evaluation (7,052 tests)
+# Complete evaluation (7,052 tests) - requires dataset download
 python src/complete_evaluation.py
 
-# Custom sample size
-python src/substantial_eval.py
+# Sample evaluation with included test cases
+python src/simple_cobol_eval.py
 ```
 
 ## 📋 Evaluation Tasks
@@ -69,11 +78,12 @@ Based on the [XMainframe paper](https://arxiv.org/pdf/2408.04660), the framework
 │   ├── substantial_eval.py      # Sample evaluation
 │   └── security_audit.py        # Security scanner
 ├── data/
-│   ├── full_*_tests.json        # Complete test datasets
-│   └── *_results.json           # Evaluation results
+│   ├── complete_mainframebench_results.json  # 78% performance results
+│   └── substantial_eval_results.json         # Sample results
 ├── docs/
 │   ├── FINAL_EVALUATION_REPORT.md
 │   └── SECURITY_REPORT.md
+├── DATASET_NOTICE.md            # Info about missing large files
 └── requirements.txt
 ```
 
@@ -84,6 +94,12 @@ Based on the [XMainframe paper](https://arxiv.org/pdf/2408.04660), the framework
 | MCQ | 1,931 | 78.0% | 1,506 correct |
 | QA | 2,598 | 82.0% | High quality |
 | Code | 2,523 | 0.74 BLEU | Strong understanding |
+
+## 📊 Dataset Information
+
+**Complete test datasets available at:** https://huggingface.co/datasets/Fsoft-AIC/MainframeBench
+
+Due to GitHub file size limits, the large test files are not included but can be easily downloaded from HuggingFace or generated using the provided scripts.
 
 ## 🤝 Contributing
 
