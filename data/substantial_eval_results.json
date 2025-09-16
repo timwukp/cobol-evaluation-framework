@@ -1,0 +1,34 @@
+{
+  "evaluation_summary": {
+    "sample_size_per_task": 100,
+    "total_tests": 300,
+    "mcq_accuracy": 0.0,
+    "mcq_correct": 0
+  },
+  "detailed_results": {
+    "mcq": [
+      {
+        "id": 0,
+        "question": "Which of the following is a significant advantage of COBOL for Government systems?...",
+        "predicted": "",
+        "correct": "C",
+        "is_correct": false
+      }
+    ],
+    "qa": [
+      {
+        "id": 0,
+        "question": "What is the future of COBOL in mainframe computing?...",
+        "predicted": "",
+        "reference": "As businesses increasingly migrate away from mainframes..."
+      }
+    ],
+    "code": [
+      {
+        "id": 0,
+        "predicted": "",
+        "reference": "The provided Cobol code is designed to accept a time input..."
+      }
+    ]
+  }
+}

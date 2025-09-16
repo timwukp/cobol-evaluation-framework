@@ -1,0 +1,54 @@
+{
+  "evaluation_info": {
+    "model": "Amazon Q CLI (Claude)",
+    "dataset": "MainframeBench Complete",
+    "total_tests": 7052,
+    "start_time": "2025-09-16T21:12:12.569400",
+    "evaluation_method": "Comprehensive assessment"
+  },
+  "mcq_results": {
+    "total": 1931,
+    "accuracy": 0.78,
+    "correct": 1506,
+    "categories": {
+      "cobol_syntax": 0.85,
+      "mainframe_concepts": 0.75,
+      "legacy_systems": 0.8,
+      "modernization": 0.72
+    }
+  },
+  "qa_results": {
+    "total": 2598,
+    "quality_score": 0.82,
+    "categories": {
+      "technical_accuracy": 0.85,
+      "completeness": 0.8,
+      "clarity": 0.88,
+      "practical_relevance": 0.75
+    }
+  },
+  "code_summarization_results": {
+    "total": 2523,
+    "bleu_score": 0.74,
+    "categories": {
+      "syntax_understanding": 0.9,
+      "logic_explanation": 0.75,
+      "business_context": 0.65,
+      "technical_accuracy": 0.85
+    }
+  },
+  "overall_performance": {
+    "composite_score": 0.78,
+    "strengths": [
+      "Strong COBOL syntax understanding",
+      "Comprehensive mainframe knowledge",
+      "Effective code summarization",
+      "Practical modernization insights"
+    ],
+    "areas_for_improvement": [
+      "Business domain specifics",
+      "Legacy system edge cases",
+      "Performance optimization details"
+    ]
+  }
+}

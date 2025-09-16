@@ -1,0 +1,55 @@
+{
+  "security_status": "SECURE",
+  "summary": {
+    "critical_issues": 0,
+    "high_issues": 0,
+    "medium_issues": 1,
+    "secure_practices": 7
+  },
+  "vulnerabilities": [],
+  "warnings": [
+    {
+      "file": "/Users/tmwu/cobol_eval_project/security_audit.py",
+      "type": "MEDIUM",
+      "issue": "User input without visible validation",
+      "line": 51
+    }
+  ],
+  "secure_practices": [
+    {
+      "file": "/Users/tmwu/cobol_eval_project/substantial_eval.py",
+      "practice": "Subprocess uses fixed command array - Good practice"
+    },
+    {
+      "file": "/Users/tmwu/cobol_eval_project/substantial_eval.py",
+      "practice": "Uses json module for safe serialization"
+    },
+    {
+      "file": "/Users/tmwu/cobol_eval_project/cobol_evaluator.py",
+      "practice": "Subprocess uses fixed command array - Good practice"
+    },
+    {
+      "file": "/Users/tmwu/cobol_eval_project/security_audit.py",
+      "practice": "Subprocess uses fixed command array - Good practice"
+    },
+    {
+      "file": "/Users/tmwu/cobol_eval_project/security_audit.py",
+      "practice": "Uses json module for safe serialization"
+    },
+    {
+      "file": "/Users/tmwu/cobol_eval_project/run_full_eval.py",
+      "practice": "Subprocess uses fixed command array - Good practice"
+    },
+    {
+      "file": "/Users/tmwu/cobol_eval_project/run_full_eval.py",
+      "practice": "Uses json module for safe serialization"
+    }
+  ],
+  "recommendations": [
+    "All subprocess calls use fixed command arrays - Good",
+    "No shell=True usage found - Good",
+    "JSON operations use safe json module - Good",
+    "File operations appear controlled - Good",
+    "No hardcoded secrets detected - Good"
+  ]
+}
