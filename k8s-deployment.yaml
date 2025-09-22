@@ -14,8 +14,8 @@ metadata:
   name: cobol-eval-secrets
   namespace: default
 type: Opaque
-stringData:
-  AWS_ACCESS_KEY_ID: ""  # Add your AWS credentials
+  AWS_ACCESS_KEY_ID: "REPLACE_WITH_ACTUAL_KEY"  # Replace before deployment
+  AWS_SECRET_ACCESS_KEY: "REPLACE_WITH_ACTUAL_SECRET"  # Replace before deployment
   AWS_SECRET_ACCESS_KEY: ""
   AWS_REGION: "us-east-1"
 ---
