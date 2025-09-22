@@ -25,17 +25,14 @@ class CompleteCOBOLEvaluator:
         
     def query_amazon_q(self, prompt: str) -> str:
         """Query Amazon Q CLI with security controls"""
-        try:
-            sanitized_prompt = self.sanitize_input(prompt)
-            if not sanitized_prompt:
-                return ""
-                
             result = subprocess.run(
-                ['q', 'chat', '--no-input-file', sanitized_prompt],
+                ['q', 'chat', '--no-input-file', '--'],
+                input=sanitized_prompt,
                 capture_output=True,
                 text=True,
                 timeout=30,
                 cwd='/tmp'
+            )
             )
             return result.stdout.strip() if result.returncode == 0 else ""
         except Exception as e:
