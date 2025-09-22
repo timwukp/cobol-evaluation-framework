@@ -22,7 +22,7 @@ class SecureBLEUEvaluator:
         if not isinstance(text, str):
             return ""
         # Remove potential command injection patterns
-        text = re.sub(r'[;&|`$(){}[\]<>]', '', text)
+        text = re.sub(r'[;&|`$(){}[\]<>"\'\\\n\r\t]', '', text)
         # Limit length to prevent DoS
         return text[:2000].strip()
     
