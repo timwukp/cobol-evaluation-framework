@@ -20,11 +20,19 @@ class CompleteCOBOLEvaluator:
         """Sanitize input for security"""
         if not isinstance(text, str):
             return ""
-        text = re.sub(r'[;&|`$(){}[\]<>]', '', text)
+        # Enhanced security: Remove more potential injection patterns
+        text = re.sub(r'[;&|`$(){}[\]<>"\'\\
+	]', '', text)
         return text[:2000].strip()
         
     def query_amazon_q(self, prompt: str) -> str:
         """Query Amazon Q CLI with security controls"""
+        try:
+            sanitized_prompt = self.sanitize_input(prompt)
+            if not sanitized_prompt:
+                return ""
+                
+            # Fixed: Use input parameter instead of command line argument to prevent injection
             result = subprocess.run(
                 ['q', 'chat', '--no-input-file', '--'],
                 input=sanitized_prompt,
@@ -32,7 +40,6 @@ class CompleteCOBOLEvaluator:
                 text=True,
                 timeout=30,
                 cwd='/tmp'
-            )
             )
             return result.stdout.strip() if result.returncode == 0 else ""
         except Exception as e:

@@ -21,8 +21,9 @@ class SecureBLEUEvaluator:
         """Sanitize input to prevent injection attacks"""
         if not isinstance(text, str):
             return ""
-        # Remove potential command injection patterns
-        text = re.sub(r'[;&|`$(){}[\]<>"\'\\\n\r\t]', '', text)
+        # Remove potential command injection patterns - enhanced security
+        text = re.sub(r'[;&|`$(){}[\]<>"\'\\
+	]', '', text)
         # Limit length to prevent DoS
         return text[:2000].strip()
     
@@ -31,6 +32,9 @@ class SecureBLEUEvaluator:
         try:
             sanitized_prompt = self.sanitize_input(prompt)
             if not sanitized_prompt:
+                return ""
+                
+            # Fixed: Use input parameter instead of command line argument to prevent injection
             result = subprocess.run(
                 ['q', 'chat', '--no-input-file', '--'],
                 input=sanitized_prompt,
@@ -94,13 +98,13 @@ class SecureBLEUEvaluator:
             if not cobol_code or not reference_summary:
                 continue
                 
-            prompt = f"""Please provide a concise summary of this COBOL code:
-            # Limit code length for security
-            truncated_code = cobol_code[:1000]
+            # Fixed: Separate code truncation from prompt to avoid comment in f-string
+            truncated_code = cobol_code[:1000]  # Limit code length for security
             prompt = f"""Please provide a concise summary of this COBOL code:
 
 ```cobol
 {truncated_code}
+```
 
 Provide only the summary, no additional explanation."""
             
