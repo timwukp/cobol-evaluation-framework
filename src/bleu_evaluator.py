@@ -95,10 +95,12 @@ class SecureBLEUEvaluator:
                 continue
                 
             prompt = f"""Please provide a concise summary of this COBOL code:
+            # Limit code length for security
+            truncated_code = cobol_code[:1000]
+            prompt = f"""Please provide a concise summary of this COBOL code:
 
 ```cobol
-{cobol_code[:1000]}  # Limit code length for security
-```
+{truncated_code}
 
 Provide only the summary, no additional explanation."""
             
