@@ -84,8 +84,8 @@ spec:
             - ALL
       volumes:
       - name: app-code
-        configMap:
-          name: cobol-eval-source
+        emptyDir: {}
+      - name: results-volume
       - name: results-volume
         emptyDir: {}
       restartPolicy: Always
