@@ -1,0 +1,230 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cobol-full-scale-config
+  namespace: default
+data:
+  EVALUATION_TYPE: "full_scale"
+  TOTAL_TESTS: "7052"
+  MCQ_TESTS: "1931"
+  QA_TESTS: "2598"
+  CODE_TESTS: "2523"
+  SECURITY_MODE: "enabled"
+  MONITORING_ENABLED: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cobol-full-scale-secrets
+  namespace: default
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: "REPLACE_WITH_ACTUAL_KEY"  # Replace before deployment
+  AWS_SECRET_ACCESS_KEY: "REPLACE_WITH_ACTUAL_SECRET"  # Replace before deployment
+  AWS_REGION: "us-east-1"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cobol-full-scale-evaluation
+  namespace: default
+  labels:
+    app: cobol-full-scale
+    version: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cobol-full-scale
+  template:
+    metadata:
+      labels:
+        app: cobol-full-scale
+        version: production
+    spec:
+      containers:
+      - name: cobol-full-evaluator
+        image: python:3.11-slim
+        command: ["/bin/bash"]
+        args: ["-c", "cd /app && pip install -r requirements.txt && python src/full_scale_evaluator.py"]
+        resources:
+          requests:
+            memory: "8Gi"      # Increased for full dataset
+            cpu: "2000m"       # 2 CPU cores
+          limits:
+            memory: "16Gi"     # High memory for large datasets
+            cpu: "4000m"       # 4 CPU cores max
+        env:
+        - name: EVALUATION_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: cobol-full-scale-config
+              key: EVALUATION_TYPE
+        - name: TOTAL_TESTS
+          valueFrom:
+            configMapKeyRef:
+              name: cobol-full-scale-config
+              key: TOTAL_TESTS
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: cobol-full-scale-secrets
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cobol-full-scale-secrets
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: cobol-full-scale-secrets
+              key: AWS_REGION
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: PYTHONPATH
+          value: "/app/src"
+        volumeMounts:
+        - name: app-code
+          mountPath: /app
+        - name: results-volume
+          mountPath: /results
+        - name: cache-volume
+          mountPath: /tmp
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "ps aux | grep python || exit 1"
+          initialDelaySeconds: 300
+          periodSeconds: 300
+          timeoutSeconds: 30
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - "ls /results/ || exit 1"
+          initialDelaySeconds: 60
+          periodSeconds: 60
+      volumes:
+      - name: app-code
+        emptyDir: {}
+      - name: results-volume
+        emptyDir: 
+          sizeLimit: "10Gi"  # Large storage for results
+      - name: cache-volume
+        emptyDir:
+          sizeLimit: "5Gi"   # Cache for datasets
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 1000
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      tolerations:
+      - key: "compute-optimized"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cobol-full-scale-service
+  namespace: default
+  labels:
+    app: cobol-full-scale
+spec:
+  selector:
+    app: cobol-full-scale
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: monitoring
+  type: ClusterIP
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cobol-full-scale-job
+  namespace: default
+  labels:
+    app: cobol-full-scale-job
+spec:
+  ttlSecondsAfterFinished: 86400  # Keep job for 24 hours
+  backoffLimit: 2
+  activeDeadlineSeconds: 43200    # 12 hour timeout
+  template:
+    metadata:
+      labels:
+        app: cobol-full-scale-job
+    spec:
+      containers:
+      - name: full-scale-evaluator
+        image: python:3.11-slim
+        command: ["/bin/bash"]
+        args: ["-c", "cd /app && pip install -r requirements.txt && python src/full_scale_evaluator.py"]
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "2000m"
+          limits:
+            memory: "16Gi"
+            cpu: "4000m"
+        env:
+        - name: EVALUATION_TYPE
+          value: "full_scale_production"
+        - name: TOTAL_TESTS
+          value: "7052"
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: cobol-full-scale-secrets
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cobol-full-scale-secrets
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: cobol-full-scale-secrets
+              key: AWS_REGION
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        volumeMounts:
+        - name: app-code
+          mountPath: /app
+        - name: results-volume
+          mountPath: /results
+        - name: huggingface-cache
+          mountPath: /root/.cache/huggingface
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: app-code
+        emptyDir: {}
+      - name: results-volume
+        emptyDir:
+          sizeLimit: "20Gi"  # Large storage for full results
+      - name: huggingface-cache
+        emptyDir:
+          sizeLimit: "10Gi"  # Cache for datasets
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1000
