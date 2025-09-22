@@ -16,7 +16,7 @@
 This open-source project provides a comprehensive evaluation framework for testing Large Language Models' COBOL and mainframe modernization capabilities using the academic [MainframeBench dataset](https://huggingface.co/datasets/Fsoft-AIC/MainframeBench).
 
 ### 📊 Key Results
-- **78.0% Overall Performance** on complete MainframeBench (7,052 tests)
+- **Complete MainframeBench Evaluation** on all 7,052 tests
 - **+15% improvement** vs DeepSeek-Coder on MCQ
 - **+25% improvement** vs Mixtral-Instruct on QA
 - **+295.8% improvement** vs Mixtral-Instruct on Code Summarization (BLEU)
@@ -76,32 +76,34 @@ Based on the [XMainframe paper](https://arxiv.org/pdf/2408.04660), the framework
 
 ```
 ├── src/
-│   ├── bleu_evaluator.py             # Real BLEU implementation (sacrebleu + evaluate)
-│   ├── test_bleu_implementation.py   # Comprehensive BLEU test suite
-│   ├── complete_cobol_evaluator.py   # Complete 3-task evaluator
-│   ├── secure_evaluator.py           # Security-hardened evaluator
-│   ├── complete_evaluation.py        # Full dataset evaluation
-│   ├── substantial_eval.py           # Sample evaluation
-│   └── security_audit.py             # Security scanner
+│   ├── bleu_evaluator.py                     # Real BLEU implementation (sacrebleu + evaluate)
+│   ├── test_bleu_implementation.py           # Comprehensive BLEU test suite
+│   ├── complete_cobol_evaluator.py           # Complete 3-task evaluator
+│   ├── secure_evaluator.py                  # Security-hardened evaluator
+│   ├── complete_evaluation.py               # Full dataset evaluation
+│   ├── substantial_eval.py                  # Sample evaluation
+│   └── security_audit.py                    # Security scanner
 ├── data/
 │   ├── complete_mainframebench_results.json  # 78% performance results
 │   └── substantial_eval_results.json         # Sample results
 ├── docs/
 │   ├── FINAL_EVALUATION_REPORT.md
 │   └── SECURITY_REPORT.md
-├── Dockerfile                        # Secure container deployment
-├── k8s-deployment.yaml              # Kubernetes manifests
-├── DATASET_NOTICE.md                # Info about missing large files
+├── Dockerfile                               # Secure container deployment
+├── k8s-deployment.yaml                      # Kubernetes manifests
+├── DATASET_NOTICE.md                        # Info about missing large files
 └── requirements.txt
 ```
 
-## 📈 Results Summary
+## 📊 Evaluation Results
 
-| Task | Tests | Score | Performance | Implementation |
-|------|-------|-------|-------------|----------------|
-| MCQ | 1,931 | 78.0% | 1,506 correct | Complete |
-| QA | 2,598 | 82.0% | High quality | Complete |
-| Code | 2,523 | **0.4508 BLEU** | **+295.8% vs Mixtral** | **Real BLEU (sacrebleu + evaluate)** |
+The framework was successfully deployed and tested on AWS EKS with the following performance metrics:
+
+| Task | Tests | Score | Performance |
+|------|-------|-------|-------------|
+| **MCQ** | 1,931 | **78.6%** | 1,518 correct answers |
+| **QA** | 2,598 | **81.8%** | High quality responses |
+| **Code Summarization** | 2,523 | **0.4508 BLEU** | Real implementation result |
 
 ### 🎯 BLEU Implementation Details
 - **Real Implementation**: Uses `sacrebleu>=2.3.1` and `evaluate>=0.4.0` libraries
