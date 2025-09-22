@@ -5,3 +5,7 @@ pandas>=2.3.0
 pyarrow>=21.0.0
 requests>=2.32.0
 tqdm>=4.67.0
+sacrebleu>=2.3.1
+nltk>=3.8.1
+evaluate>=0.4.0
+boto3>=1.40.0
