@@ -31,10 +31,9 @@ class SecureBLEUEvaluator:
         try:
             sanitized_prompt = self.sanitize_input(prompt)
             if not sanitized_prompt:
-                return ""
-                
             result = subprocess.run(
-                ['q', 'chat', '--no-input-file', sanitized_prompt],
+                ['q', 'chat', '--no-input-file', '--'],
+                input=sanitized_prompt,
                 capture_output=True,
                 text=True,
                 timeout=30,
